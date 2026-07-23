@@ -3,6 +3,8 @@ from app import libros
 from app.libros.queries import (
     actualizar_disponibilidad,
     crear_libro,
+    eliminar_libro,
+    libros_con_autor,
     listar_libros,
     obtener_libro,
 )
@@ -42,5 +44,14 @@ def endpoint_actualizar_disponibilidad(libro_id):
 
     disponibilidad = actualizar_disponibilidad(libro_id, datos["disponible"])
     if not disponibilidad:
-        return {"error": "libro no encontrado"}, 400
+        return {"error": "libro no encontrado"}, 404
     return jsonify(disponibilidad), 200
+
+
+@libros_bp.route("/<int:libro_id>", methods=["DELETE"])
+def endpoint_eliminar_libro(libro_id):
+    eliminado = eliminar_libro(libro_id)
+    if not eliminado:
+        return {"error": "no existe"}, 404
+    return "", 204
+
